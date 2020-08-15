@@ -54,7 +54,7 @@ dist = setup(
     author_email = "wb@di.ku.dk",
     url = "https://github.com/wouterboomsma/eigency",
     use_scm_version = True,
-    setup_requires = ['setuptools>=38','setuptools_scm'],
+    setup_requires = ['setuptools>=38','setuptools_scm','numpy','Cython'],
     ext_modules = cythonize(extensions),
     packages = find_packages(),
     include_package_data=True,
