@@ -11,9 +11,7 @@ install:
   - travis_retry pip install cython
 
 script:
-  - python --version
-  - python setup.py build
-  - python setup.py install
+  - pip install -e .
   - cd tests
   - python setup.py build
   - python setup.py install
