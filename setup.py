@@ -5,42 +5,22 @@ from setuptools.extension import Extension
 
 import eigency
 import numpy as np
+from Cython.Build import cythonize
 
 __package_name__ = "eigency"
 __eigen_dir__ = eigency.__eigen_dir__
 __eigen_lib_dir__ = join(basename(__eigen_dir__), 'Eigen')
 
-# Not all users may have cython installed.  If they only want this as a means
-# to access the Eigen header files to compile their own C++ code, then they
-# may not have cython already installed.  Therefore, only require cython
-# for cases where the user will need to build the .cpp files from the .pyx
-# files (typically from a git clone) and not for other pip installations.
-# cf. discussion in PR #26.
-
-# Follow the pattern recommended here:
-# http://cython.readthedocs.io/en/latest/src/reference/compilation.html#distributing-cython-modules
-try:
-    from Cython.Build import cythonize
-    # Maybe make this a command line option?
-    USE_CYTHON = True
-    ext = '.pyx'
-except ImportError:
-    USE_CYTHON = False
-    ext = '.cpp'
-
 extensions = [
-    Extension("eigency.conversions", ["eigency/conversions"+ext],
+    Extension("eigency.conversions", ["eigency/conversions.pyx"],
               include_dirs = [np.get_include(), __eigen_dir__],
               language="c++"
     ),
-    Extension("eigency.core", ["eigency/core"+ext],
+    Extension("eigency.core", ["eigency/core.pyx"],
               include_dirs = [np.get_include(), __eigen_dir__],
               language="c++"
     )
 ]
-
-if USE_CYTHON:
-    extensions = cythonize(extensions)
 
 try:
     import pypandoc
@@ -75,7 +55,7 @@ dist = setup(
     url = "https://github.com/wouterboomsma/eigency",
     use_scm_version = True,
     setup_requires = ['setuptools>=38','setuptools_scm'],
-    ext_modules = extensions,
+    ext_modules = cythonize(extensions),
     packages = find_packages(),
     include_package_data=True,
     package_data = {__package_name__: [
