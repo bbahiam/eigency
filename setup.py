@@ -34,8 +34,9 @@ for root, dirs, files in os.walk(join(__eigen_dir__, 'Eigen')):
         if f.endswith('.h'):
             eigen_data_files.append(join(root, f))
 
-dist = setup(
+setup(
     name = __package_name__,
+    version="1.78.1",
     description = "Cython interface between the numpy arrays and the Matrix/Array classes of the Eigen C++ library",
     long_description=long_description,
     classifiers=[
@@ -54,7 +55,6 @@ dist = setup(
     author_email = "wb@di.ku.dk",
     url = "https://github.com/wouterboomsma/eigency",
     use_scm_version = True,
-    version="1.78.1",
     ext_modules = cythonize(extensions),
     packages = find_packages(),
     include_package_data=True,
